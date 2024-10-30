@@ -1,0 +1,62 @@
+Objective 1: System Health Monitoring Script
+Filename: system_health_monitor.py
+
+This Python script monitors CPU usage, memory usage, and disk space on a Linux system. If any metrics exceed predefined thresholds, an alert is logged to the console.
+import psutil
+import time
+
+# Thresholds
+CPU_THRESHOLD = 80  # in percentage
+MEMORY_THRESHOLD = 80  # in percentage
+DISK_THRESHOLD = 80  # in percentage
+
+def check_cpu():
+    cpu_usage = psutil.cpu_percent(interval=1)
+    if cpu_usage > CPU_THRESHOLD:
+        print(f"[ALERT] CPU usage at {cpu_usage}%, exceeding threshold of {CPU_THRESHOLD}%.")
+
+def check_memory():
+    memory = psutil.virtual_memory()
+    if memory.percent > MEMORY_THRESHOLD:
+        print(f"[ALERT] Memory usage at {memory.percent}%, exceeding threshold of {MEMORY_THRESHOLD}%.")
+
+def check_disk():
+    disk = psutil.disk_usage('/')
+    if disk.percent > DISK_THRESHOLD:
+        print(f"[ALERT] Disk usage at {disk.percent}%, exceeding threshold of {DISK_THRESHOLD}%.")
+
+def monitor_system():
+    while True:
+        check_cpu()
+        check_memory()
+        check_disk()
+        print("System health check completed.\n")
+        time.sleep(60)  # Check every minute
+
+if _name_ == "_main_":
+    monitor_system()
+    Objective 2: Application Health Checker Script
+Filename: application_health_checker.py
+
+This Python script checks if a web application is accessible by verifying its HTTP status code. If the application is "up," it logs an info message; if it's "down," it logs an alert.
+import requests
+import time
+
+# Application URL
+URL = "http://example.com"
+CHECK_INTERVAL = 60  # Check every minute
+
+def check_application():
+    try:
+        response = requests.get(URL)
+        if response.status_code == 200:
+            print(f"[INFO] Application is up at {URL}")
+        else:
+            print(f"[ALERT] Application down, status code: {response.status_code}")
+    except requests.ConnectionError:
+        print(f"[ALERT] Unable to connect to {URL}")
+
+if _name_ == "_main_":
+    while True:
+        check_application()
+        time.sleep(CHECK_INTERVAL)
